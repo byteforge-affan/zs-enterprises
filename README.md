@@ -39,7 +39,7 @@ The website presents company information, packaging products and services, indus
 
 Clone or download this repository and preview its HTML pages with a local web server (for example, VS Code Live Server). A local server is recommended because some assets use root-relative `/assets/` paths. No PHP/MySQL setup is required for the documented frontend.
 
-**Known domain-metadata discrepancy:** The current `index.html` contains canonical, Open Graph and structured-data URLs referencing `https://www.zspackages.com/`. The confirmed primary website is `https://zandsenterprises.com/`. This README records the inconsistency only; no HTML metadata, redirects or hosting settings were changed.
+**Domain metadata:** The canonical, Open Graph and structured-data URLs in the HTML pages, as well as `robots.txt` and `sitemap.xml`, use the primary website domain `https://zandsenterprises.com/`. This was checked by inspecting the project source files only; live hosting, redirects and search-engine indexing have not been tested.
 
 ## Project Context
 
