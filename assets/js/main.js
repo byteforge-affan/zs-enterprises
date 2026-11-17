@@ -165,11 +165,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   // ---- Form submission endpoint (single source of truth) ----
-  // The real Formspree endpoint is not yet configured for this project.
-  // To go live: replace the "action" attribute on <form id="zsContactForm">
-  // in contact.html with the real Formspree URL (https://formspree.io/f/xxxxxxxx).
-  // That single attribute is the only place the endpoint needs to be set —
-  // everything below reads it from here, so nothing else needs to change.
+  // Read from the "action" attribute on <form id="zsContactForm"> in contact.html.
   var CONTACT_FORM_ENDPOINT = contactForm.getAttribute("action") || "";
   var CONTACT_FORM_IS_CONFIGURED = !!CONTACT_FORM_ENDPOINT && CONTACT_FORM_ENDPOINT.indexOf("YOUR_FORM_ID") === -1;
 
@@ -351,6 +347,15 @@ document.addEventListener("DOMContentLoaded", function () {
     var mm = String(today0.getMonth() + 1).padStart(2, "0");
     var dd = String(today0.getDate()).padStart(2, "0");
     deliveryDate.min = yyyy + "-" + mm + "-" + dd;
+
+    // Clear the error as soon as the customer picks a valid date (or empties the field).
+    var clearDateErrorIfValid = function () {
+      if (!deliveryDate.value || deliveryDate.value >= deliveryDate.min) {
+        setFieldError(deliveryDate, "");
+      }
+    };
+    deliveryDate.addEventListener("input", clearDateErrorIfValid);
+    deliveryDate.addEventListener("change", clearDateErrorIfValid);
   }
 
   /* ---- auto-grow textareas ---- */
@@ -570,10 +575,9 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       if (deliveryDate && deliveryDate.value) {
-        var today = new Date();
-        today.setHours(0, 0, 0, 0);
-        var picked = new Date(deliveryDate.value);
-        if (picked < today) {
+        // Same rule as before (no past dates). Compared as local YYYY-MM-DD strings
+        // against the input's min (today, local) so the result doesn't depend on timezone.
+        if (deliveryDate.value < deliveryDate.min) {
           setFieldError(deliveryDate, "Please choose a date that isn't in the past.");
           firstInvalid = firstInvalid || deliveryDate;
         }

@@ -450,10 +450,14 @@ ul {
 
   pointer-events: none;
 
+  /* Closed menu is removed from the tab order and accessibility tree. */
+  visibility: hidden;
+
   transition:
     max-height 380ms var(--zs-ease),
     opacity 280ms var(--zs-ease),
-    transform 280ms var(--zs-ease);
+    transform 280ms var(--zs-ease),
+    visibility 0s linear 380ms;
 }
 
 .zs-mobile-menu.is-open {
@@ -464,6 +468,14 @@ ul {
   transform: translateY(0);
 
   pointer-events: auto;
+
+  visibility: visible;
+
+  transition:
+    max-height 380ms var(--zs-ease),
+    opacity 280ms var(--zs-ease),
+    transform 280ms var(--zs-ease),
+    visibility 0s;
 }
 
 .zs-mobile-panel {
@@ -556,6 +568,44 @@ ul {
 .zs-mobile-menu a:focus-visible {
   outline: 2px solid var(--zs-gold);
   outline-offset: 3px;
+}
+
+/* ==========================================================================
+   SKIP LINK (visible only when keyboard-focused)
+   ========================================================================== */
+
+.zs-skip-link {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 10000;
+
+  padding: 12px 18px;
+
+  background: var(--zs-mocha);
+  color: #FBF8F1;
+  border: 2px solid var(--zs-gold);
+  border-radius: 10px;
+
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+
+  transform: translateY(-200%);
+}
+
+.zs-skip-link:focus,
+.zs-skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid var(--zs-gold);
+  outline-offset: 3px;
+}
+
+/* <main id="main-content" tabindex="-1"> receives focus from the skip link only */
+main[id="main-content"]:focus {
+  outline: none;
 }
 
 /* ==========================================================================
